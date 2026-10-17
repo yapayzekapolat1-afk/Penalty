@@ -1,10 +1,15 @@
-name: Build APK
+name: Build APK ve AAB
 on:
   push:
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      KS_B64: ${{ secrets.KEYSTORE_BASE64 }}
+      KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+      KS_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KS_KEYPASS: ${{ secrets.KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -13,12 +18,12 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
       - name: Capacitor kur
         run: |
           mkdir www && cp index.html www/index.html
           npm init -y
-          npm i @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6 sharp
+          npm i @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 sharp
           npx cap init "IOZ Penalty Legend" com.ioz.penaltylegend --web-dir=www
           npx cap add android
       - name: Ikon
@@ -58,13 +63,45 @@ jobs:
             }
           }
           JAVA
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
           npx cap sync android
-      - name: APK derle
+      - name: Imza ayarla (anahtar varsa)
+        if: env.KS_B64 != ''
+        run: |
+          echo "$KS_B64" | base64 -d > android/app/release.jks
+          cat >> android/app/build.gradle <<'GRADLE'
+          android {
+            signingConfigs {
+              release {
+                storeFile file("release.jks")
+                storePassword System.getenv("KS_PASS")
+                keyAlias System.getenv("KS_ALIAS")
+                keyPassword System.getenv("KS_KEYPASS")
+              }
+            }
+            buildTypes {
+              release {
+                signingConfig signingConfigs.release
+              }
+            }
+          }
+          GRADLE
+      - name: Debug APK derle
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+      - name: Release AAB derle (Play Store)
+        if: env.KS_B64 != ''
+        run: |
+          cd android
+          ./gradlew bundleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: IOZ-Penalty-Legend-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: env.KS_B64 != ''
+        with:
+          name: IOZ-Penalty-Legend-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
