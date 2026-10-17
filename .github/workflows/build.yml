@@ -201,6 +201,9 @@ jobs:
       - name: Surum ayarla (version.txt)
         run: |
           sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
+          sed -i -E 's/(compileSdkVersion = )[0-9]+/\136/; s/(targetSdkVersion = )[0-9]+/\136/' android/variables.gradle
+          echo "android.suppressUnsupportedCompileSdk=36" >> android/gradle.properties
+          cat android/variables.gradle
           grep -n "minSdkVersion" android/variables.gradle
           VERSION=$(tr -d ' \r\n' < version.txt)
           echo "Surum: $VERSION  Kod: ${{ github.run_number }}"
