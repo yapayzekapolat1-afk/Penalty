@@ -200,6 +200,8 @@ jobs:
           GRADLE
       - name: Surum ayarla (version.txt)
         run: |
+          sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
+          grep -n "minSdkVersion" android/variables.gradle
           VERSION=$(tr -d ' \r\n' < version.txt)
           echo "Surum: $VERSION  Kod: ${{ github.run_number }}"
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
