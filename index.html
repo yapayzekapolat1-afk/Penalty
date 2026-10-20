@@ -1586,10 +1586,10 @@ requestAnimationFrame(frame);
 <div id="ozM"><div class="ozl ch"><header><span class="ht"><svg style="color:#9fd9bf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" stroke-width="2.6"/></svg><span data-i18n="chat">Sohbet</span></span><div><button id="ozCk" aria-label="Engellenenler" data-i18n-al="blocked_list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></button><button id="ozCx" aria-label="Kapat" data-i18n-al="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></header><div id="ozCl"></div><div class="ozi"><input id="ozCi" placeholder="Mesaj yaz…" data-i18n-ph="ph_msg" maxlength="200" autocomplete="off"><button id="ozCs" data-i18n="send">Gönder</button></div></div></div>
 <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
 <style id="paycss">
-.pyd{position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 204px);display:grid;grid-template-columns:repeat(2,78px);gap:6px;pointer-events:none;animation:rise .6s .3s both}
-.pyt{pointer-events:auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 2px 4px;border-radius:13px;border:1px solid rgba(255,210,63,.7);background:linear-gradient(180deg,rgba(255,210,63,.24),rgba(255,140,0,.12));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.pyt:active{transform:scale(.95)}.pyt svg{width:34px;height:34px;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
-.pyt b{font-size:9.5px;font-weight:900;color:#ffd23f;letter-spacing:.02em;line-height:1.1}.pyt small{font-size:8.5px;font-weight:700;color:#cfd8ea;line-height:1.1}
+.pyd{position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 204px);display:grid;grid-template-columns:repeat(4,1fr);width:calc(100vw - 90px);max-width:330px;gap:5px;pointer-events:none;animation:rise .6s .3s both}
+.pyt{pointer-events:auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 1px 3px;min-width:0;border-radius:11px;border:1px solid rgba(255,210,63,.7);background:linear-gradient(180deg,rgba(255,210,63,.24),rgba(255,140,0,.12));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pyt:active{transform:scale(.95)}.pyt svg{width:26px;height:26px;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.pyt b{font-size:9.5px;font-weight:900;color:#ffd23f;letter-spacing:.02em;line-height:1.1}.pyt small{font-size:8px;font-weight:700;color:#cfd8ea;line-height:1.15;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:clip}.pyt b{white-space:nowrap}
 .pyt.own{border-color:#35e0a0;background:linear-gradient(180deg,rgba(53,224,160,.24),rgba(23,165,106,.12))}.pyt.own b{color:#7dffc8}
 .pyt.max{filter:grayscale(.85);opacity:.55}
 .pyn{position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;background:#ff4d5e;border:1.5px solid #fff;box-shadow:0 0 8px #ff4d5e}
@@ -1885,6 +1885,8 @@ g('pySc').onclick=async e=>{
   if(tot)pyReward(pyT('YÜKLEME ÖDÜLÜ','TOP-UP REWARD'),[{m:tot}]);else akToast(pyT('Ödül alınamadı, tekrar dene','Could not claim, try again'))}};
 g('pySx').onclick=()=>g('pyS').classList.add('h');g('pyS').onclick=e=>{if(e.target===g('pyS'))g('pyS').classList.add('h')};
 g('pyRk').onclick=()=>g('pyR').classList.add('h');
+function pyPos(){try{const a=g('adwb'),d=document.querySelector('.pyd'),k=g('akb');if(!a||!d||!k)return;const ar=a.getBoundingClientRect();if(!ar.height)return;d.style.transform='';d.style.top=(ar.bottom+6)+'px';const dr=d.getBoundingClientRect(),kr=k.getBoundingClientRect();const room=kr.top-dr.top-4;if(room>20&&dr.height>room){d.style.transformOrigin='left top';d.style.transform='scale('+(room/dr.height)+')'}}catch(e){}}
+setInterval(pyPos,1000);window.addEventListener('resize',pyPos);setTimeout(pyPos,300);
 g('pyV').onclick=()=>pyOpen('vip');g('pyB').onclick=()=>pyOpen('baslangic');g('pyM').onclick=()=>pyOpen('mini');g('pyY').onclick=()=>pyOpen('tier');
 /* --- açılışta VIP + başlangıç teklifi (çarpı ile kapanır) --- */
 function pyOffer(){
